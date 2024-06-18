@@ -44,18 +44,38 @@ QString QInputReceiver::translateMessage(UINT msg, WPARAM wParam, LPARAM lParam)
     {
     case WM_KEYDOWN: return QString("Key Down: %1").arg(wParam);
     case WM_KEYUP: return QString("Key Up: %1").arg(wParam);
-    case WM_LBUTTONDOWN: return QString("Left Mouse Button Down");
-    case WM_LBUTTONUP: return QString("Left Mouse Button Up");
-    case WM_RBUTTONDOWN: return QString("Right Mouse Button Down");
-    case WM_RBUTTONUP: return QString("Right Mouse Button Up");
-    case WM_MBUTTONDOWN: return QString("Middle Mouse Button Down");
-    case WM_MBUTTONUP: return QString("Middle Mouse Button Up");
+    case WM_LBUTTONDOWN:
+        return QString("Left Mouse Button Down at (%1, %2)")
+            .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+    case WM_LBUTTONUP:
+        return QString("Left Mouse Button Up at (%1, %2)")
+            .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+    case WM_RBUTTONDOWN:
+        return QString("Right Mouse Button Down at (%1, %2)")
+            .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+    case WM_RBUTTONUP:
+        return QString("Right Mouse Button Up at (%1, %2)")
+            .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+    case WM_MBUTTONDOWN:
+        return QString("Middle Mouse Button Down at (%1, %2)")
+            .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+    case WM_MBUTTONUP:
+        return QString("Middle Mouse Button Up at (%1, %2)")
+            .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_XBUTTONDOWN:
-        return QString("X Mouse Button Down: %1")
-            .arg(HIWORD(wParam) == XBUTTON1 ? "XButton1" : "XButton2");
+        if (HIWORD(wParam) == XBUTTON1)
+            return QString("X1 Mouse Button Down at (%1, %2)")
+                .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+        else
+            return QString("X2 Mouse Button Down at (%1, %2)")
+                .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_XBUTTONUP:
-        return QString("X Mouse Button Up: %1")
-            .arg(HIWORD(wParam) == XBUTTON1 ? "XButton1" : "XButton2");
+        if (HIWORD(wParam) == XBUTTON1)
+            return QString("X1 Mouse Button Up at (%1, %2)")
+                .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+        else
+            return QString("X2 Mouse Button Up at (%1, %2)")
+                .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_MOUSEMOVE:
         return QString("Mouse Move: (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
