@@ -4,6 +4,7 @@
 #include <windows.h>
 #include <windowsx.h>
 #include <QMainWindow>
+#include <QDateTime>
 // #include <QScrollBar>
 
 QT_BEGIN_NAMESPACE

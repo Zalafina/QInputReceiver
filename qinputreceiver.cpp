@@ -22,6 +22,9 @@ QInputReceiver::~QInputReceiver()
 
 bool QInputReceiver::nativeEvent(const QByteArray &eventType, void *message, qintptr *result)
 {
+    static POINT lastMousePos = { -1, -1 };
+    static bool stateChanged = false;
+
     MSG *msg = static_cast<MSG*>(message);
     if (msg->message == WM_KEYDOWN || msg->message == WM_KEYUP ||
         msg->message == WM_LBUTTONDOWN || msg->message == WM_LBUTTONUP ||
@@ -31,10 +34,31 @@ bool QInputReceiver::nativeEvent(const QByteArray &eventType, void *message, qin
         msg->message == WM_MOUSEMOVE || msg->message == WM_MOUSEWHEEL ||
         msg->message == WM_MOUSEHWHEEL)
     {
+        // 检查是否是 WM_MOUSEMOVE 消息
+        if (msg->message == WM_MOUSEMOVE) {
+            POINT currentMousePos = { GET_X_LPARAM(msg->lParam), GET_Y_LPARAM(msg->lParam) };
+
+            // 如果坐标相同且状态没有变化，忽略消息
+            if (currentMousePos.x == lastMousePos.x && currentMousePos.y == lastMousePos.y && !stateChanged) {
+                return false; // 忽略消息
+            }
+
+            // 更新上一次的鼠标位置和状态
+            lastMousePos = currentMousePos;
+            stateChanged = false; // 根据实际情况更新状态变化
+        }
+
+        // 处理其他消息
         QString messageText = translateMessage(msg->message, msg->wParam, msg->lParam);
+
+        // 获取当前时间并格式化为字符串
+        QString timestamp = QDateTime::currentDateTime().toString("[hh:mm:ss.zzz]");
+        // 将时间戳添加到消息前面
+        messageText.prepend(timestamp + " ");
+
         ui->messageDisplay->append(messageText);
-        // ui->messageDisplay->verticalScrollBar()->setValue(ui->messageDisplay->verticalScrollBar()->maximum());
     }
+
     return QMainWindow::nativeEvent(eventType, message, result);
 }
 
