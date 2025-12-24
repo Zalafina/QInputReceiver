@@ -74,20 +74,20 @@ QString QInputReceiver::translateMessage(UINT msg, WPARAM wParam, LPARAM lParam)
     case WM_KEYDOWN:
     {
         QString keyName = getKeyName(wParam, isExtendedKey);
-        QString hexCode = QString("0x%1").arg(wParam, 2, 16, QChar('0')).toUpper();
+        QString hexCode = QString("%1").arg(wParam, 2, 16, QChar('0')).toUpper();
         if (isExtendedKey) {
             hexCode += "+E";
         }
-        return QString("Key Down: %1 (%2)").arg(keyName).arg(hexCode);
+        return QString("Key Down: %1 (0x%2)").arg(keyName, hexCode);
     }
     case WM_KEYUP:
     {
         QString keyName = getKeyName(wParam, isExtendedKey);
-        QString hexCode = QString("0x%1").arg(wParam, 2, 16, QChar('0')).toUpper();
+        QString hexCode = QString("%1").arg(wParam, 2, 16, QChar('0')).toUpper();
         if (isExtendedKey) {
             hexCode += "+E";
         }
-        return QString("Key Up: %1 (%2)").arg(keyName).arg(hexCode);
+        return QString("Key Up: %1 (0x%2)").arg(keyName, hexCode);
     }
     case WM_LBUTTONDOWN:
         return QString("Left Mouse Button Down at (%1, %2)")
