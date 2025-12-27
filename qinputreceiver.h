@@ -6,6 +6,7 @@
 #include <QMainWindow>
 #include <QDateTime>
 #include <QMap>
+#include <QTextEdit>
 // #include <QScrollBar>
 
 QT_BEGIN_NAMESPACE
@@ -13,6 +14,19 @@ namespace Ui {
 class QInputReceiver;
 }
 QT_END_NAMESPACE
+
+// InputReceiverTextEdit: Custom textedit widget to handle keyboard events
+class InputReceiverTextEdit : public QTextEdit
+{
+    Q_OBJECT
+
+public:
+    explicit InputReceiverTextEdit(QWidget *parent = nullptr) : QTextEdit(parent) {}
+
+protected:
+    // Override keyPressEvent to handle Esc key press for closing dialog
+    void keyPressEvent(QKeyEvent *event) override;
+};
 
 class QInputReceiver : public QMainWindow
 {

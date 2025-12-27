@@ -327,3 +327,8 @@ QString QInputReceiver::getKeyName(int virtualKeyCode, bool isExtended)
 
     return QString::number(virtualKeyCode);
 }
+
+void InputReceiverTextEdit::keyPressEvent(QKeyEvent *event)
+{
+    Q_UNUSED(event);
+}
