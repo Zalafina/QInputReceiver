@@ -24,8 +24,8 @@ public:
     explicit InputReceiverTextEdit(QWidget *parent = nullptr) : QTextEdit(parent) {}
 
 protected:
-    // Override keyPressEvent to handle Esc key press for closing dialog
     void keyPressEvent(QKeyEvent *event) override;
+    void wheelEvent(QWheelEvent *event) override;
 };
 
 class QInputReceiver : public QMainWindow

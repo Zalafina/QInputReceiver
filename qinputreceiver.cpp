@@ -78,7 +78,7 @@ QString QInputReceiver::translateMessage(UINT msg, WPARAM wParam, LPARAM lParam)
         if (isExtendedKey) {
             hexCode += "+E";
         }
-        return QString("Key Down: %1 (0x%2)").arg(keyName, hexCode);
+        return QString("Keyboard Down : %1 (0x%2)").arg(keyName, hexCode);
     }
     case WM_KEYUP:
     {
@@ -87,47 +87,47 @@ QString QInputReceiver::translateMessage(UINT msg, WPARAM wParam, LPARAM lParam)
         if (isExtendedKey) {
             hexCode += "+E";
         }
-        return QString("Key Up: %1 (0x%2)").arg(keyName, hexCode);
+        return QString("Keyboard Up   : %1 (0x%2)").arg(keyName, hexCode);
     }
     case WM_LBUTTONDOWN:
-        return QString("Left Mouse Button Down at (%1, %2)")
+        return QString("Mouse-L  Down : (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_LBUTTONUP:
-        return QString("Left Mouse Button Up at (%1, %2)")
+        return QString("Mouse-L  Up   : (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_RBUTTONDOWN:
-        return QString("Right Mouse Button Down at (%1, %2)")
+        return QString("Mouse-R  Down : (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_RBUTTONUP:
-        return QString("Right Mouse Button Up at (%1, %2)")
+        return QString("Mouse-R  Up   : (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_MBUTTONDOWN:
-        return QString("Middle Mouse Button Down at (%1, %2)")
+        return QString("Mouse-M  Down : (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_MBUTTONUP:
-        return QString("Middle Mouse Button Up at (%1, %2)")
+        return QString("Mouse-M  Up   : (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_XBUTTONDOWN:
         if (HIWORD(wParam) == XBUTTON1)
-            return QString("X1 Mouse Button Down at (%1, %2)")
+            return QString("Mouse-X1 Down : (%1, %2)")
                 .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
         else
-            return QString("X2 Mouse Button Down at (%1, %2)")
+            return QString("Mouse-X2 Down : (%1, %2)")
                 .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_XBUTTONUP:
         if (HIWORD(wParam) == XBUTTON1)
-            return QString("X1 Mouse Button Up at (%1, %2)")
+            return QString("Mouse-X1 Up   : (%1, %2)")
                 .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
         else
-            return QString("X2 Mouse Button Up at (%1, %2)")
+            return QString("Mouse-X2 Up   : (%1, %2)")
                 .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_MOUSEMOVE:
-        return QString("Mouse Move: (%1, %2)")
+        return QString("Mouse Move    : (%1, %2)")
             .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_MOUSEWHEEL:
-        return QString("Mouse Wheel: %1").arg(GET_WHEEL_DELTA_WPARAM(wParam));
+        return QString("Mouse Wheel   : %1").arg(GET_WHEEL_DELTA_WPARAM(wParam));
     case WM_MOUSEHWHEEL:
-        return QString("Mouse Horizontal Wheel: %1").arg(GET_WHEEL_DELTA_WPARAM(wParam));
+        return QString("Mouse H-Wheel : %1").arg(GET_WHEEL_DELTA_WPARAM(wParam));
     default: return QString("Unknown Message");
     }
 }
@@ -329,6 +329,11 @@ QString QInputReceiver::getKeyName(int virtualKeyCode, bool isExtended)
 }
 
 void InputReceiverTextEdit::keyPressEvent(QKeyEvent *event)
+{
+    Q_UNUSED(event);
+}
+
+void InputReceiverTextEdit::wheelEvent(QWheelEvent *event)
 {
     Q_UNUSED(event);
 }
