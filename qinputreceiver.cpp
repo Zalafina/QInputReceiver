@@ -1,6 +1,13 @@
 #include "qinputreceiver.h"
 #include "ui_qinputreceiver.h"
 
+// 四种常见等宽字体的定义
+inline constexpr const char FONT_CONSOLAS[]         = "Consolas";
+inline constexpr const char FONT_LUCIDA_CONSOLE[]   = "Lucida Console";
+inline constexpr const char FONT_COURIER_NEW[]      = "Courier New";
+inline constexpr const char FONT_COURIER[]          = "Courier";
+
+
 QInputReceiver::QInputReceiver(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::QInputReceiver)
@@ -13,6 +20,7 @@ QInputReceiver::QInputReceiver(QWidget *parent)
     // layout->addWidget(m_MessageDisplayLabel);
     // centralWidget()->setLayout(layout);
     // m_MessageDisplayLabel->setWordWrap(true);
+    ui->messageDisplay->setFont(QFont(FONT_CONSOLAS, 11));
 
     initVirtualKeyNameMap();
 }
@@ -53,12 +61,14 @@ bool QInputReceiver::nativeEvent(const QByteArray &eventType, void *message, qin
         // 处理其他消息
         QString messageText = translateMessage(msg->message, msg->wParam, msg->lParam);
 
-        // 获取当前时间并格式化为字符串
-        QString timestamp = QDateTime::currentDateTime().toString("[hh:mm:ss.zzz]");
-        // 将时间戳添加到消息前面
-        messageText.prepend(timestamp + " ");
+        if (!messageText.isEmpty()) {
+            // 获取当前时间并格式化为字符串
+            QString timestamp = QDateTime::currentDateTime().toString("[hh:mm:ss.zzz]");
+            // 将时间戳添加到消息前面
+            messageText.prepend(timestamp + " ");
 
-        ui->messageDisplay->append(messageText);
+            ui->messageDisplay->append(messageText);
+        }
     }
 
     return QMainWindow::nativeEvent(eventType, message, result);
@@ -122,14 +132,18 @@ QString QInputReceiver::translateMessage(UINT msg, WPARAM wParam, LPARAM lParam)
             return QString("Mouse-X2 Up   : (%1, %2)")
                 .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
     case WM_MOUSEMOVE:
-        return QString("Mouse Move    : (%1, %2)")
-            .arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+        if (ui->showMouseMoveCheckBox->isChecked()) {
+            return QString("Mouse Move    : (%1, %2)").arg(GET_X_LPARAM(lParam)).arg(GET_Y_LPARAM(lParam));
+        }
+        break;
     case WM_MOUSEWHEEL:
         return QString("Mouse Wheel   : %1").arg(GET_WHEEL_DELTA_WPARAM(wParam));
     case WM_MOUSEHWHEEL:
         return QString("Mouse H-Wheel : %1").arg(GET_WHEEL_DELTA_WPARAM(wParam));
     default: return QString("Unknown Message");
     }
+
+    return QString();
 }
 
 void QInputReceiver::initVirtualKeyNameMap()

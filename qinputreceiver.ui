@@ -25,6 +25,13 @@
       </property>
      </widget>
     </item>
+    <item>
+     <widget class="QCheckBox" name="showMouseMoveCheckBox">
+      <property name="text">
+       <string>Show Mouse Move</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
